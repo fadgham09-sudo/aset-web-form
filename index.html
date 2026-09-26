@@ -1,0 +1,29 @@
+<script>
+  // Ganti dengan URL Web App Apps Script Anda dari Langkah 1
+  const scriptURL = 'https://script.google.com/macros/s/AKfyc...URL_APPS_SCRIPT_ANDA.../exec';
+  const form = document.forms['formSaya']; // pastikan tag form pakai: name="formSaya"
+  const btn = document.getElementById("btnSubmit");
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    
+    btn.innerHTML = "⏳ Mengirim Data...";
+    btn.disabled = true;
+
+    // Mengirim data form ke Apps Script
+    fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+      .then(response => response.json())
+      .then(data => {
+        alert("✅ Data berhasil disimpan!");
+        form.reset();
+        btn.innerHTML = "Kirim Sekarang";
+        btn.disabled = false;
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        alert("❌ Terjadi kesalahan pengiriman data.");
+        btn.innerHTML = "Coba Lagi";
+        btn.disabled = false;
+      });
+  });
+</script>
