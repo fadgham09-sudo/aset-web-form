@@ -1,29 +1,222 @@
-<script>
-  // Ganti dengan URL Web App Apps Script Anda dari Langkah 1
-  const scriptURL = 'https://script.google.com/macros/s/AKfyc...URL_APPS_SCRIPT_ANDA.../exec';
-  const form = document.forms['formSaya']; // pastikan tag form pakai: name="formSaya"
-  const btn = document.getElementById("btnSubmit");
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Verifikasi Data Pengiriman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #0056b3; --bg: #f4f7f6; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 40px 20px; color: #333; }
+    .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 600px; border-top: 5px solid var(--primary); }
+    .header { text-align: center; margin-bottom: 25px; }
+    .header img { width: 120px; margin-bottom: 15px; }
+    .form-group { margin-bottom: 15px; }
+    label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 5px; color: #555; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; }
+    button { width: 100%; padding: 12px; background: var(--primary); color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+    button:disabled { background: #999; cursor: not-allowed; }
     
-    btn.innerHTML = "⏳ Mengirim Data...";
-    btn.disabled = true;
+    /* Animasi transisi step */
+    #step2 { display: none; } 
+    .hidden-input { display: none; } /* Menyembunyikan input ID */
+  </style>
+</head>
+<body>
 
-    // Mengirim data form ke Apps Script
-    fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-      .then(response => response.json())
+  <div class="card">
+    <div class="header">
+      <img src="URL_LOGO_ANDA_DISINI" alt="Logo">
+      <h2 id="judulForm">Verifikasi Identitas</h2>
+      <p id="subJudul">Silakan masukkan No Billing dan NIM Anda.</p>
+    </div>
+
+    <!-- STEP 1: LOGIN CEK DATA -->
+    <form id="formCek">
+      <input type="hidden" name="action" value="cek">
+      <div class="form-group">
+        <label>No. Billing</label>
+        <input type="text" name="no_billing" id="inputBilling" required>
+      </div>
+      <div class="form-group">
+        <label>NIM</label>
+        <input type="text" name="nim" id="inputNim" required>
+      </div>
+      <button type="submit" id="btnCek">Cek & Buka Form</button>
+    </form>
+
+    <!-- STEP 2: FORM ALAMAT (Awalnya Disembunyikan) -->
+    <form id="formSimpan" style="display: none;">
+      <input type="hidden" name="action" value="simpan">
+      
+      <!-- Input yang akan ikut terkirim tapi di-readonly agar user tahu ID mereka -->
+      <div style="display:flex; gap:10px; margin-bottom: 20px;">
+        <div style="flex:1"><label>No Billing</label><input type="text" name="no_billing" id="lockBilling" readonly style="background:#eee;"></div>
+        <div style="flex:1"><label>NIM</label><input type="text" name="nim" id="lockNim" readonly style="background:#eee;"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Detail Alamat (Min 40 Karakter)</label>
+        <textarea name="detail_alamat" id="detail_alamat" rows="3" required minlength="40"></textarea>
+      </div>
+
+      <div class="form-group"><label>Provinsi</label><select name="nama_provinsi" id="provinsi" required><option value="">Pilih Provinsi...</option></select></div>
+      <div class="form-group"><label>Kab/Kota</label><select name="nama_kabko" id="kabko" required disabled><option value="">Pilih Kab/Kota...</option></select></div>
+      <div class="form-group"><label>Kecamatan</label><select name="nama_kecamatan" id="kecamatan" required disabled><option value="">Pilih Kecamatan...</option></select></div>
+      <div class="form-group"><label>Kelurahan</label><select name="nama_kelurahan" id="kelurahan" required disabled><option value="">Pilih Kelurahan...</option></select></div>
+      <div class="form-group"><label>Kode Pos</label><input type="number" name="kode_pos" required></div>
+
+      <!-- INPUT TERSEMBUNYI UNTUK MENAMPUNG ID WILAYAH & SHIPPING -->
+      <input type="text" name="id_provinsi" id="id_provinsi" class="hidden-input">
+      <input type="text" name="id_kabko" id="id_kabko" class="hidden-input">
+      <input type="text" name="id_kecamatan" id="id_kecamatan" class="hidden-input">
+      <input type="text" name="id_kelurahan" id="id_kelurahan" class="hidden-input">
+      <input type="text" name="id_shipping" id="id_shipping" class="hidden-input">
+
+      <button type="submit" id="btnSimpan">Simpan Final Data Pengiriman</button>
+    </form>
+  </div>
+
+  <script>
+    const SCRIPT_URL = 'PASTE_URL_WEB_APP_APPS_SCRIPT_ANDA_DISINI';
+    
+    let rawDataWilayah = []; // Variabel untuk menampung seluruh JSON
+
+    // 0. AMBIL FILE JSON DARI GITHUB SAAT WEB DIBUKA (BACKGROUND PROCESS)
+    fetch('data-wilayah.json')
+      .then(res => res.json())
       .then(data => {
-        alert("✅ Data berhasil disimpan!");
-        form.reset();
-        btn.innerHTML = "Kirim Sekarang";
-        btn.disabled = false;
+        rawDataWilayah = data;
+        
+        // Ambil list provinsi (Unique)
+        const provSet = new Set(data.map(item => item.nama_provinsi));
+        const provSelect = document.getElementById('provinsi');
+        [...provSet].sort().forEach(prov => {
+          provSelect.innerHTML += `<option value="${prov}">${prov}</option>`;
+        });
       })
-      .catch(error => {
-        console.error('Error!', error.message);
-        alert("❌ Terjadi kesalahan pengiriman data.");
-        btn.innerHTML = "Coba Lagi";
-        btn.disabled = false;
-      });
-  });
-</script>
+      .catch(err => console.error("Gagal load JSON:", err));
+
+    // 1. LOGIKA TOMBOL CEK DATA (MEMBUKA FORM)
+    document.getElementById('formCek').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnCek');
+      btn.innerHTML = "⏳ Memverifikasi...";
+      btn.disabled = true;
+
+      fetch(SCRIPT_URL, { method: 'POST', body: new FormData(this) })
+        .then(res => res.json())
+        .then(data => {
+          if(data.status === "success") {
+            // Sembunyikan Step 1, Tampilkan Step 2
+            document.getElementById('formCek').style.display = 'none';
+            document.getElementById('formSimpan').style.display = 'block';
+            
+            // Ubah Teks Judul
+            document.getElementById('judulForm').innerText = "Lengkapi Alamat";
+            document.getElementById('subJudul').innerText = "Masukkan detail pengiriman secara akurat.";
+
+            // Kunci NIM & Billing di Form 2
+            document.getElementById('lockBilling').value = document.getElementById('inputBilling').value;
+            document.getElementById('lockNim').value = document.getElementById('inputNim').value;
+          } else {
+            alert("❌ " + data.pesan);
+            btn.innerHTML = "Cek & Buka Form";
+            btn.disabled = false;
+          }
+        });
+    });
+
+    // 2. LOGIKA DROPDOWN BERTINGKAT MENGGUNAKAN JSON DI BROWSER
+    const provSelect = document.getElementById('provinsi');
+    const kabSelect = document.getElementById('kabko');
+    const kecSelect = document.getElementById('kecamatan');
+    const kelSelect = document.getElementById('kelurahan');
+
+    provSelect.addEventListener('change', function() {
+      kabSelect.innerHTML = '<option value="">Pilih Kab/Kota...</option>';
+      kecSelect.innerHTML = '<option value="">Pilih Kecamatan...</option>';
+      kelSelect.innerHTML = '<option value="">Pilih Kelurahan...</option>';
+      kecSelect.disabled = true; kelSelect.disabled = true;
+      
+      if(this.value) {
+        // Filter data array untuk mendapatkan Kab/Kota di provinsi tersebut
+        const kabSet = new Set(rawDataWilayah.filter(i => i.nama_provinsi === this.value).map(i => i.nama_kabko));
+        [...kabSet].sort().forEach(kab => kabSelect.innerHTML += `<option value="${kab}">${kab}</option>`);
+        kabSelect.disabled = false;
+      } else { kabSelect.disabled = true; }
+    });
+
+    kabSelect.addEventListener('change', function() {
+      kecSelect.innerHTML = '<option value="">Pilih Kecamatan...</option>';
+      kelSelect.innerHTML = '<option value="">Pilih Kelurahan...</option>';
+      kelSelect.disabled = true;
+      if(this.value) {
+        const kecSet = new Set(rawDataWilayah.filter(i => i.nama_kabko === this.value && i.nama_provinsi === provSelect.value).map(i => i.nama_kecamatan));
+        [...kecSet].sort().forEach(kec => kecSelect.innerHTML += `<option value="${kec}">${kec}</option>`);
+        kecSelect.disabled = false;
+      } else { kecSelect.disabled = true; }
+    });
+
+    kecSelect.addEventListener('change', function() {
+      kelSelect.innerHTML = '<option value="">Pilih Kelurahan...</option>';
+      if(this.value) {
+        const kelSet = new Set(rawDataWilayah.filter(i => i.nama_kecamatan === this.value && i.nama_kabko === kabSelect.value).map(i => i.nama_kelurahan));
+        [...kelSet].sort().forEach(kel => kelSelect.innerHTML += `<option value="${kel}">${kel}</option>`);
+        kelSelect.disabled = false;
+      } else { kelSelect.disabled = true; }
+    });
+
+    // 3. AUTO FILL: MENGISI HIDDEN INPUT SAAT KELURAHAN DIPILIH
+    kelSelect.addEventListener('change', function() {
+      if(this.value) {
+        // Cari baris data JSON spesifik yang cocok dengan pilihan dari Provinsi s.d Kelurahan
+        const selectedData = rawDataWilayah.find(i => 
+          i.nama_provinsi === provSelect.value && 
+          i.nama_kabko === kabSelect.value && 
+          i.nama_kecamatan === kecSelect.value && 
+          i.nama_kelurahan === this.value
+        );
+        
+        if(selectedData) {
+          // Isi input tersembunyi dengan ID yang didapat
+          document.getElementById('id_provinsi').value = selectedData.id_provinsi;
+          document.getElementById('id_kabko').value = selectedData.id_kabko;
+          document.getElementById('id_kecamatan').value = selectedData.id_kecamatan;
+          document.getElementById('id_kelurahan').value = selectedData.id_kelurahan;
+          document.getElementById('id_shipping').value = selectedData.id_shipping;
+        }
+      }
+    });
+
+    // 4. LOGIKA TOMBOL SIMPAN FINAL
+    document.getElementById('formSimpan').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const alamat = document.getElementById('detail_alamat').value;
+      if (alamat.length < 40) { alert("Alamat harus diisi minimal 40 karakter!"); return; }
+
+      const btn = document.getElementById('btnSimpan');
+      btn.innerHTML = "⏳ Mengunci & Menyimpan Data...";
+      btn.disabled = true;
+
+      fetch(SCRIPT_URL, { method: 'POST', body: new FormData(this) })
+        .then(res => res.json())
+        .then(data => {
+          if(data.status === "success") {
+            alert("✅ " + data.pesan);
+            this.reset();
+            btn.innerHTML = "Data Tersimpan";
+            
+            // Refresh halaman agar kembali ke awal
+            window.location.reload(); 
+          } else {
+            alert("❌ " + data.pesan);
+            btn.innerHTML = "Simpan Final Data Pengiriman";
+            btn.disabled = false;
+          }
+        });
+    });
+  </script>
+</body>
+</html>
