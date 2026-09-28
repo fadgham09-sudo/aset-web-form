@@ -6,32 +6,22 @@
   <title>Validasi Alamat Pengiriman BAC - UT</title>
   <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* Color Palette */
+    /* Color Palette & Root Variables */
     :root {
       --primary-blue: #034694;
       --accent-yellow: #ffde00;
+      --text-dark: #16243a;
+      --text-gray: #66758a;
+      --border-light: #dce4ee;
+      --border-blue: rgba(3, 70, 148, 0.16);
+      --panel-blue: #052f69;
+      --panel-deep: #032653;
       --light-bg: #f8f9fc;
-      --text-dark: #1a1a2e;
-      --text-gray: #6b7280;
-      --border-light: #e5e7eb;
-      --border-blue: rgba(3, 70, 148, 0.15);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: 'Red Hat Display', 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 50%, #f0f5ff 100%);
-      color: var(--text-dark);
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-attachment: fixed;
-    }
-
-    /* Fade-in Animation */
+    /* Animations */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -59,397 +49,7 @@
       }
     }
 
-    .card {
-      background: white;
-      padding: 50px 40px;
-      border-radius: 24px;
-      box-shadow: 0 20px 60px -12px rgba(3, 70, 148, 0.12);
-      width: 100%;
-      max-width: 600px;
-      border: 1px solid var(--border-blue);
-      animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Futuristic Background Effect */
-    .card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(3, 70, 148, 0.05) 0%, transparent 70%);
-      border-radius: 50%;
-      animation: fadeIn 1.2s ease-in;
-    }
-
-    .card::after {
-      content: '';
-      position: absolute;
-      bottom: -30%;
-      left: -30%;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(255, 222, 0, 0.03) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-
-    .card > * { position: relative; z-index: 1; }
-
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-      animation: fadeInUp 1s ease-out 0.2s backwards;
-    }
-
-    .header-logo-group {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      align-items: center;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-
-    .header-logo-group img {
-      height: 80px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 4px 12px rgba(3, 70, 148, 0.15));
-      transition: transform 0.3s ease;
-    }
-
-    .header-logo-group img:hover {
-      transform: scale(1.05);
-    }
-
-    .header h1 {
-      font-size: 32px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary-blue) 0%, #002c5c 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin: 15px 0 10px 0;
-      letter-spacing: -0.5px;
-    }
-
-    .header h2 {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary-blue);
-      margin: 0 0 10px 0;
-      letter-spacing: -0.3px;
-    }
-
-    .header p {
-      color: var(--text-gray);
-      font-size: 15px;
-      line-height: 1.6;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    .header .subtitle-warning {
-      color: #dc2626;
-      font-size: 13px;
-      font-weight: 600;
-      margin-top: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .form-group {
-      margin-bottom: 24px;
-      animation: fadeInUp 1s ease-out backwards;
-    }
-
-    .form-group:nth-child(1) { animation-delay: 0.3s; }
-    .form-group:nth-child(2) { animation-delay: 0.4s; }
-    .form-group:nth-child(3) { animation-delay: 0.5s; }
-    .form-group:nth-child(4) { animation-delay: 0.6s; }
-    .form-group:nth-child(5) { animation-delay: 0.7s; }
-    .form-group:nth-child(6) { animation-delay: 0.8s; }
-    .form-group:nth-child(7) { animation-delay: 0.9s; }
-    .form-group:nth-child(8) { animation-delay: 1s; }
-
-    label {
-      font-size: 14px;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 10px;
-      color: var(--text-dark);
-      text-transform: capitalize;
-      letter-spacing: 0.3px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid var(--border-light);
-      border-radius: 12px;
-      box-sizing: border-box;
-      font-family: 'Red Hat Display', 'Inter', sans-serif;
-      font-size: 15px;
-      background: #fafbfc;
-      color: var(--text-dark);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    input:hover, select:hover, textarea:hover {
-      border-color: var(--accent-yellow);
-      background: #ffffff;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary-blue);
-      background: #ffffff;
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(3, 70, 148, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.05);
-    }
-
-    input:disabled, select:disabled {
-      background: #f3f4f6;
-      cursor: not-allowed;
-      border-color: var(--border-light);
-      color: var(--text-gray);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .char-count {
-      font-size: 12px;
-      margin-top: 8px;
-      text-align: right;
-      color: #dc2626;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .char-count.valid {
-      color: #10b981;
-    }
-
-    /* Button Styles */
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      animation: fadeInUp 1.2s ease-out 1s backwards;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 16px 20px;
-      background: linear-gradient(135deg, var(--primary-blue) 0%, #002c5c 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      font-family: 'Red Hat Display', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.3px;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 222, 0, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(3, 70, 148, 0.25);
-    }
-
-    .btn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn:disabled {
-      background: #d1d5db;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .btn-secondary {
-      background: white;
-      color: var(--primary-blue);
-      border: 2px solid var(--primary-blue);
-    }
-
-    .btn-secondary:hover {
-      background: #f8f9fc;
-      box-shadow: 0 8px 16px rgba(3, 70, 148, 0.15);
-    }
-
-    .btn span {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Modal Overlay */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(4px);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      animation: fadeIn 0.3s ease-in;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 40px;
-      border-radius: 24px;
-      width: 90%;
-      max-width: 550px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border-blue);
-      animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .modal-content h2 {
-      color: var(--primary-blue);
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 10px;
-      letter-spacing: -0.3px;
-    }
-
-    .modal-content > p {
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 30px;
-      color: var(--text-gray);
-      line-height: 1.6;
-    }
-
-    .review-item {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border-light);
-      animation: fadeInUp 0.5s ease-out backwards;
-    }
-
-    .review-item:nth-child(1) { animation-delay: 0.1s; }
-    .review-item:nth-child(2) { animation-delay: 0.2s; }
-    .review-item:nth-child(3) { animation-delay: 0.3s; }
-    .review-item:nth-child(4) { animation-delay: 0.4s; }
-
-    .review-label {
-      font-size: 12px;
-      color: var(--text-gray);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-    }
-
-    .review-value {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--primary-blue);
-      word-wrap: break-word;
-      line-height: 1.5;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .card {
-        padding: 30px 20px;
-      }
-
-      .header-logo-group {
-        gap: 12px;
-      }
-
-      .header-logo-group img {
-        height: 60px;
-      }
-
-      .header h1 {
-        font-size: 24px;
-      }
-
-      .header h2 {
-        font-size: 22px;
-      }
-
-      .btn {
-        padding: 14px 16px;
-        font-size: 15px;
-      }
-
-      .modal-content {
-        padding: 24px;
-      }
-    }
-
-    /* Scrollbar Styling */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--primary-blue);
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #002c5c;
-    }
-
-    :root {
-      --primary-blue: #034694;
-      --accent-yellow: #ffde00;
-      --text-dark: #16243a;
-      --text-gray: #66758a;
-      --border-light: #dce4ee;
-      --border-blue: rgba(3, 70, 148, 0.16);
-      --panel-blue: #052f69;
-      --panel-deep: #032653;
-    }
-
+    /* Body & Layout */
     body {
       min-height: 100vh;
       padding: 28px;
@@ -458,6 +58,8 @@
       background-color: #f3f6fa;
       background-image: linear-gradient(rgba(3, 70, 148, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(3, 70, 148, .035) 1px, transparent 1px);
       background-size: 32px 32px;
+      font-family: 'Red Hat Display', 'Inter', sans-serif;
+      color: var(--text-dark);
     }
 
     .portal-shell {
@@ -473,6 +75,7 @@
       animation: fadeInUp .65s ease-out both;
     }
 
+    /* Visual Panel (Left Side) */
     .visual-panel {
       min-height: 100%;
       padding: 24px 38px 28px;
@@ -649,6 +252,7 @@
       line-height: 1.5;
     }
 
+    /* Content Panel (Right Side) */
     .content-panel {
       min-width: 0;
       padding: 52px clamp(28px, 5vw, 70px);
@@ -661,7 +265,6 @@
     .page-logo {
       position: absolute;
       z-index: 2;
-      /*keep the existing size and position rules*/
       top: 24px;
       right: 30px;
       width: 200px;
@@ -670,6 +273,7 @@
       object-position: right center;
     }
 
+    /* Card Styles */
     .card {
       width: 100%;
       max-width: 510px;
@@ -682,8 +286,15 @@
     }
 
     .card::before, .card::after { display: none; }
-    .header { margin-bottom: 34px; text-align: left; animation: none; }
+
+    .header { 
+      margin-bottom: 34px; 
+      text-align: left; 
+      animation: none; 
+    }
+
     .header .eyebrow { color: var(--primary-blue); }
+
     .header h1, .header h2 {
       margin: 0 0 12px;
       color: var(--text-dark);
@@ -693,7 +304,15 @@
       background: none;
       -webkit-text-fill-color: currentColor;
     }
-    .header p { max-width: 430px; margin: 0; color: var(--text-gray); font-size: 14px; line-height: 1.7; }
+
+    .header p { 
+      max-width: 430px; 
+      margin: 0; 
+      color: var(--text-gray); 
+      font-size: 14px; 
+      line-height: 1.7; 
+    }
+
     .header .subtitle-warning {
       justify-content: flex-start;
       padding: 11px 13px;
@@ -702,51 +321,263 @@
       color: #765500;
       font-size: 12px;
       line-height: 1.5;
+      margin-top: 12px;
     }
 
-    .form-group { margin-bottom: 19px; animation: none; }
-    label { margin-bottom: 8px; color: #25364c; font-size: 13px; letter-spacing: 0; text-transform: none; }
+    /* Form Styles */
+    .form-group { 
+      margin-bottom: 19px; 
+      animation: none; 
+    }
+
+    label { 
+      margin-bottom: 8px; 
+      color: #25364c; 
+      font-size: 13px; 
+      letter-spacing: 0; 
+      text-transform: none;
+      display: block;
+      font-weight: 600;
+    }
+
     input, select, textarea {
+      width: 100%;
       min-height: 48px;
       padding: 12px 14px;
       border: 1px solid #cfd9e6;
       border-radius: 4px;
       background: #fff;
       font-size: 14px;
+      font-family: 'Red Hat Display', 'Inter', sans-serif;
       transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
     }
-    input:hover, select:hover, textarea:hover { border-color: #8da9cb; background: #fff; }
-    input:focus, select:focus, textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(3,70,148,.12); }
-    input:disabled, select:disabled { background: #f1f4f7; color: #8b98a8; }
-    textarea { min-height: 112px; resize: vertical; }
-    input[readonly] { color: var(--primary-blue); background: #edf3fa !important; }
-    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
-    .form-grid .field-wide { grid-column: 1 / -1; }
-    .char-count { margin-top: 7px; color: #9b5d00; font-size: 11px; font-weight: 700; }
-    .char-count.valid { color: #14714c; }
 
-    .btn-group { gap: 10px; animation: none; }
+    input:hover, select:hover, textarea:hover { 
+      border-color: #8da9cb; 
+      background: #fff; 
+    }
+
+    input:focus, select:focus, textarea:focus { 
+      border-color: var(--primary-blue); 
+      box-shadow: 0 0 0 3px rgba(3,70,148,.12); 
+      outline: none;
+    }
+
+    input:disabled, select:disabled { 
+      background: #f1f4f7; 
+      color: #8b98a8;
+      cursor: not-allowed;
+    }
+
+    textarea { 
+      min-height: 112px; 
+      resize: vertical; 
+    }
+
+    input[readonly] { 
+      color: var(--primary-blue); 
+      background: #edf3fa !important;
+      font-weight: bold;
+      cursor: not-allowed;
+    }
+
+    .form-grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, minmax(0, 1fr)); 
+      gap: 0 16px; 
+    }
+
+    .form-grid .field-wide { 
+      grid-column: 1 / -1; 
+    }
+
+    .char-count { 
+      margin-top: 7px; 
+      color: #9b5d00; 
+      font-size: 11px; 
+      font-weight: 700; 
+    }
+
+    .char-count.valid { 
+      color: #14714c; 
+    }
+
+    /* Button Styles */
+    .btn-group { 
+      gap: 10px; 
+      animation: none;
+      display: flex;
+      flex-direction: column;
+    }
+
     .btn {
+      width: 100%;
       min-height: 50px;
       padding: 13px 18px;
+      border: none;
       border-radius: 4px;
       background: var(--primary-blue);
+      color: white;
       font-size: 14px;
+      font-weight: 700;
+      font-family: 'Red Hat Display', sans-serif;
       letter-spacing: 0;
+      cursor: pointer;
       transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
+      position: relative;
+      overflow: hidden;
     }
+
     .btn::before { display: none; }
-    .btn:hover { background: #002f69; transform: translateY(-1px); box-shadow: 0 7px 16px rgba(3,70,148,.2); }
-    .btn:disabled { background: #b6c2d0; color: #f7f9fb; }
-    .btn-secondary { border: 1px solid #aebdd0; color: var(--primary-blue); background: #fff; }
-    .btn-secondary:hover { color: var(--primary-blue); background: #f2f6fb; }
 
-    .modal-overlay { padding: 18px; background: rgba(8, 25, 48, .62); }
-    .modal-content { border-radius: 6px; padding: 32px; }
-    .modal-content h2 { color: var(--text-dark); }
-    .review-item { animation: none; }
-    .review-value { color: var(--primary-blue); }
+    .btn:hover { 
+      background: #002f69; 
+      transform: translateY(-1px); 
+      box-shadow: 0 7px 16px rgba(3,70,148,.2); 
+    }
 
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled { 
+      background: #b6c2d0; 
+      color: #f7f9fb;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary { 
+      border: 1px solid #aebdd0; 
+      color: var(--primary-blue); 
+      background: #fff; 
+    }
+
+    .btn-secondary:hover { 
+      color: var(--primary-blue); 
+      background: #f2f6fb; 
+    }
+
+    .btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Error Alert */
+    .error-alert {
+      padding: 12px 14px;
+      border-left: 3px solid #dc2626;
+      background: #fee2e2;
+      color: #7f1d1d;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .error-alert.show {
+      display: block;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(8, 25, 48, .62);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 18px;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 32px;
+      border-radius: 6px;
+      width: 90%;
+      max-width: 550px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-blue);
+      animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-content h2 {
+      color: var(--text-dark);
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .modal-content > p {
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 30px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .review-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+      animation: fadeInUp 0.5s ease-out backwards;
+    }
+
+    .review-item:nth-child(1) { animation-delay: 0.1s; }
+    .review-item:nth-child(2) { animation-delay: 0.2s; }
+    .review-item:nth-child(3) { animation-delay: 0.3s; }
+    .review-item:nth-child(4) { animation-delay: 0.4s; }
+
+    .review-label {
+      font-size: 12px;
+      color: var(--text-gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .review-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-blue);
+      word-wrap: break-word;
+      line-height: 1.5;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-blue);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #002c5c;
+    }
+
+    /* Responsive Design */
     @media (max-width: 860px) {
       body { padding: 16px; }
       .portal-shell { grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); min-height: 640px; }
@@ -796,9 +627,9 @@
         <div class="art-label"><span>PDBA UT</span><span class="art-status">Siap Melayani</span></div>
         <div class="route-map">
           <video autoplay muted loop playsinline preload="metadata" aria-label="Animasi logo PDBA tersusun dari kepingan puzzle">
-            <source src="../Aset%20Grafis%20UT/animasi-logo-PDBA.mp4" type="video/mp4">
+            <source src="animasi-logo-PDBA.mp4" type="video/mp4">
           </video>
-          <img class="form-stage-logo" src="../Aset%20Grafis%20UT/Logo-PDBA1.png" alt="">
+          <img class="form-stage-logo" src="Logo-PDBA1.png" alt="Logo PDBA">
         </div>
       </div>
       <div class="steps" aria-label="Tahapan pengisian">
@@ -810,7 +641,8 @@
     </aside>
 
     <section class="content-panel">
-      <img class="page-logo" src="../Aset%20Grafis%20UT/logo%20warna%20UT.png" alt="Universitas Terbuka">
+      <img class="page-logo" src="logo%20warna%20UT.png" alt="Universitas Terbuka">
+  
   <!-- STEP 1: LOGIN CREDENTIALS (NIM Only) -->
   <div class="card" id="cardLogin">
     <div class="header">
@@ -818,10 +650,18 @@
       <h1>Verifikasi Data Alamat Pengiriman</h1>
       <p>Masukkan NIM Anda untuk melanjutkan proses kelengkapan data alamat pengiriman Bahan Ajar Cetak Anda.</p>
     </div>
+    <div class="error-alert" id="errorLogin"></div>
     <form id="formCek">
       <div class="form-group">
         <label for="nim">NIM Mahasiswa</label>
-        <input type="text" id="nim" required autocomplete="username" placeholder="Contoh: 123456789">
+        <input 
+          type="text" 
+          id="nim" 
+          required 
+          inputmode="numeric"
+          pattern="[0-9]+"
+          autocomplete="username" 
+          placeholder="Contoh: 123456789">
       </div>
       <div class="btn-group">
         <button type="submit" class="btn" id="btnCek">
@@ -839,11 +679,12 @@
       <p>Pastikan semua data yang Anda masukkan sudah akurat dan lengkap sebelum menyimpan.</p>
       <p class="subtitle-warning">⚠️ Perhatian: Data hanya dapat disimpan 1 (satu) kali secara permanen.</p>
     </div>
+    <div class="error-alert" id="errorForm"></div>
     <form id="formUtama">
       <div class="form-grid">
       <div class="form-group">
         <label for="lockNim">NIM Tervalidasi</label>
-        <input type="text" id="lockNim" readonly style="background:#eee; font-weight:bold; cursor:not-allowed;">
+        <input type="text" id="lockNim" readonly>
       </div>
 
       <div class="form-group field-wide">
@@ -854,27 +695,35 @@
       
       <div class="form-group">
         <label for="provinsi">Provinsi</label>
-        <select id="provinsi"><option value="">-- Pilih Provinsi --</option></select>
+        <select id="provinsi" required><option value="">-- Pilih Provinsi --</option></select>
       </div>
       
       <div class="form-group">
         <label for="kabko">Kabupaten / Kota</label>
-        <select id="kabko" disabled><option value="">-- Pilih Kab/Kota --</option></select>
+        <select id="kabko" disabled required><option value="">-- Pilih Kab/Kota --</option></select>
       </div>
       
       <div class="form-group">
         <label for="kecamatan">Kecamatan</label>
-        <select id="kecamatan" disabled><option value="">-- Pilih Kecamatan --</option></select>
+        <select id="kecamatan" disabled required><option value="">-- Pilih Kecamatan --</option></select>
       </div>
       
       <div class="form-group">
         <label for="kelurahan">Kelurahan</label>
-        <select id="kelurahan" disabled><option value="">-- Pilih Kelurahan --</option></select>
+        <select id="kelurahan" disabled required><option value="">-- Pilih Kelurahan --</option></select>
       </div>
       
       <div class="form-group">
         <label for="kode_pos">Kode Pos</label>
-        <input type="text" id="kode_pos" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" placeholder="Masukkan 5 digit kode pos">
+        <input 
+          type="text" 
+          id="kode_pos" 
+          inputmode="numeric" 
+          autocomplete="postal-code" 
+          maxlength="5" 
+          pattern="[0-9]{5}" 
+          placeholder="Masukkan 5 digit kode pos"
+          required>
       </div>
       </div>
 
@@ -927,24 +776,80 @@
 
     let rawDataWilayah = [];
     let state = { nim: '', id_provinsi: '', id_kabko: '', id_kecamatan: '', id_kelurahan: '', id_shipping: '' };
+    let dataLoaded = false;
+
+    // Helper function to show error messages
+    function showError(elementId, message) {
+      const errorEl = document.getElementById(elementId);
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      }
+    }
+
+    function hideError(elementId) {
+      const errorEl = document.getElementById(elementId);
+      if (errorEl) {
+        errorEl.classList.remove('show');
+        errorEl.textContent = '';
+      }
+    }
 
     // Load region data
     fetch('data-wilayah.json')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         rawDataWilayah = data;
+        dataLoaded = true;
         const provSet = [...new Set(data.map(item => item.nama_provinsi))].sort();
         const provEl = document.getElementById('provinsi');
-        provSet.forEach(p => provEl.innerHTML += `<option value="${p}">${p}</option>`);
-      }).catch(err => console.error("Gagal memuat JSON:", err));
+        provSet.forEach(p => addOption(provEl, p, p));
+        hideError('errorLogin');
+        hideError('errorForm');
+      })
+      .catch(err => {
+        console.error("Gagal memuat data wilayah:", err);
+        showError('errorLogin', '❌ Gagal memuat data wilayah. Silakan refresh halaman.');
+        dataLoaded = false;
+      });
+
+    // Helper function to safely add options
+    function addOption(selectElement, value, label) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = label;
+      selectElement.appendChild(option);
+    }
+
+    // Helper function to clear and reset select element
+    function clearSelect(selectElement) {
+      selectElement.innerHTML = '<option value="">-- Pilih --</option>';
+      selectElement.disabled = true;
+    }
 
     // LOGIN LOGIC
     document.getElementById('formCek').addEventListener('submit', function(e) {
       e.preventDefault();
       const btn = document.getElementById('btnCek');
+      const nimInput = document.getElementById('nim');
       
-      state.nim = document.getElementById('nim').value.trim();
+      state.nim = nimInput.value.trim();
 
+      // Validate NIM
+      if (!state.nim || !/^[0-9]+$/.test(state.nim)) {
+        showError('errorLogin', '❌ NIM harus berupa angka. Silakan periksa kembali.');
+        return;
+      }
+
+      if (!dataLoaded) {
+        showError('errorLogin', '❌ Data wilayah belum siap. Silakan tunggu sebentar.');
+        return;
+      }
+
+      hideError('errorLogin');
       btn.innerText = "⏳ Memeriksa Database...";
       btn.disabled = true;
 
@@ -960,12 +865,19 @@
             document.getElementById('cardForm').style.display = 'block';
             document.getElementById('portalShell').classList.add('is-form-stage');
             document.getElementById('lockNim').value = state.nim;
+            hideError('errorForm');
           } else {
-            alert("❌ " + res.pesan);
+            showError('errorLogin', "❌ " + (res.pesan || "NIM tidak ditemukan dalam sistem."));
             btn.innerText = "✓ Validasi & Buka Form";
             btn.disabled = false;
           }
-        }).catch(err => { alert("Koneksi gagal."); btn.disabled = false; btn.innerText = "✓ Validasi & Buka Form"; });
+        })
+        .catch(err => { 
+          showError('errorLogin', "❌ Koneksi gagal. Silakan coba lagi.");
+          console.error("Fetch error:", err);
+          btn.disabled = false; 
+          btn.innerText = "✓ Validasi & Buka Form"; 
+        });
     });
 
     // Form Elements
@@ -979,100 +891,141 @@
 
     // Filter dropdown options
     function filterOptions(parentVal, keyFilter, keyTarget, targetEl) {
-      targetEl.innerHTML = `<option value="">-- Pilih --</option>`;
-      if (!parentVal) { targetEl.disabled = true; return; }
+      clearSelect(targetEl);
+      if (!parentVal) return;
       
       const filteredSet = [...new Set(rawDataWilayah.filter(i => i[keyFilter] === parentVal).map(i => i[keyTarget]))].sort();
-      filteredSet.forEach(v => targetEl.innerHTML += `<option value="${v}">${v}</option>`);
+      filteredSet.forEach(v => addOption(targetEl, v, v));
       targetEl.disabled = false;
     }
 
-    elProv.addEventListener('change', e => { filterOptions(e.target.value, 'nama_provinsi', 'nama_kabko', elKab); elKec.disabled = true; elKel.disabled = true; checkFormCompletion(); });
-    elKab.addEventListener('change', e => { filterOptions(e.target.value, 'nama_kabko', 'nama_kecamatan', elKec); elKel.disabled = true; checkFormCompletion(); });
-    elKec.addEventListener('change', e => { filterOptions(e.target.value, 'nama_kecamatan', 'nama_kelurahan', elKel); checkFormCompletion(); });
+    elProv.addEventListener('change', e => { 
+      filterOptions(e.target.value, 'nama_provinsi', 'nama_kabko', elKab); 
+      clearSelect(elKec);
+      clearSelect(elKel);
+      checkFormCompletion(); 
+    });
+
+    elKab.addEventListener('change', e => { 
+      filterOptions(e.target.value, 'nama_kabko', 'nama_kecamatan', elKec); 
+      clearSelect(elKel);
+      checkFormCompletion(); 
+    });
+
+    elKec.addEventListener('change', e => { 
+      filterOptions(e.target.value, 'nama_kecamatan', 'nama_kelurahan', elKel); 
+      checkFormCompletion(); 
+    });
+
     elKel.addEventListener('change', function() {
-      const selected = rawDataWilayah.find(i => i.nama_provinsi === elProv.value && i.nama_kabko === elKab.value && i.nama_kecamatan === elKec.value && i.nama_kelurahan === this.value);
+      const selected = rawDataWilayah.find(i => 
+        i.nama_provinsi === elProv.value && 
+        i.nama_kabko === elKab.value && 
+        i.nama_kecamatan === elKec.value && 
+        i.nama_kelurahan === this.value
+      );
       if(selected) {
-        state.id_provinsi = selected.id_provinsi; state.id_kabko = selected.id_kabko;
-        state.id_kecamatan = selected.id_kecamatan; state.id_kelurahan = selected.id_kelurahan;
+        state.id_provinsi = selected.id_provinsi; 
+        state.id_kabko = selected.id_kabko;
+        state.id_kecamatan = selected.id_kecamatan; 
+        state.id_kelurahan = selected.id_kelurahan;
         state.id_shipping = selected.id_shipping;
       }
       checkFormCompletion();
     });
 
-    // Check form completion
-    function checkFormCompletion() {
-      const charLen = elAlamat.value.trim().length;
+    // Character count for address field
+    elAlamat.addEventListener('input', function() {
+      const charLen = this.value.length;
       const countEl = document.getElementById('charCount');
+      countEl.textContent = `${charLen} / 40 Karakter ${charLen >= 40 ? '(Terpenuhi)' : '(Belum Memenuhi)'}`;
       
       if (charLen >= 40) {
-        countEl.innerText = `${charLen} Karakter (Memenuhi Syarat) ✓`;
         countEl.classList.add('valid');
       } else {
-        countEl.innerText = `${charLen} / 40 Karakter (Belum Memenuhi)`;
         countEl.classList.remove('valid');
       }
 
-      if (charLen >= 40 && elProv.value && elKab.value && elKec.value && elKel.value && /^\d{5}$/.test(elPos.value)) {
-        btnReview.disabled = false;
-      } else {
-        btnReview.disabled = true;
-      }
-    }
-    
-    elAlamat.addEventListener('input', checkFormCompletion);
-    elPos.addEventListener('input', checkFormCompletion);
+      checkFormCompletion();
+    });
 
-    // Review modal
-    btnReview.addEventListener('click', () => {
-      document.getElementById('revKredensial').innerText = state.nim;
-      document.getElementById('revAlamat').innerText = elAlamat.value;
-      document.getElementById('revWilayah').innerText = `${elProv.value} — ${elKab.value} — ${elKec.value} — ${elKel.value}`;
-      document.getElementById('revKodepos').innerText = elPos.value;
+    // Postal code validation
+    elPos.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5);
+      checkFormCompletion();
+    });
+
+    // Check form completion
+    function checkFormCompletion() {
+      const charLen = elAlamat.value.length;
+      const isComplete = charLen >= 40 && elProv.value && elKab.value && elKec.value && elKel.value && /^\d{5}$/.test(elPos.value);
       
+      btnReview.disabled = !isComplete;
+    }
+
+    // Review button
+    document.getElementById('btnReview').addEventListener('click', function() {
+      document.getElementById('revKredensial').textContent = state.nim;
+      document.getElementById('revAlamat').textContent = elAlamat.value;
+      document.getElementById('revWilayah').textContent = `${elProv.value} / ${elKab.value} / ${elKec.value} / ${elKel.value}`;
+      document.getElementById('revKodepos').textContent = elPos.value;
+
       document.getElementById('modalReview').classList.add('active');
     });
 
-    document.getElementById('btnBatalReview').addEventListener('click', () => {
+    // Close modal
+    document.getElementById('btnBatalReview').addEventListener('click', function() {
       document.getElementById('modalReview').classList.remove('active');
     });
 
-    // Save data
+    // Save permanently
     document.getElementById('btnSimpanPermanen').addEventListener('click', function() {
-      const btnSimpan = this;
-      btnSimpan.innerText = "⏳ Sedang Mengunci Data...";
-      btnSimpan.disabled = true;
-      document.getElementById('btnBatalReview').style.display = 'none'; 
+      const btn = this;
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Menyimpan Data...</span>';
 
       const fd = new FormData();
       fd.append('action', 'simpan');
       fd.append('nim', state.nim);
-      fd.append('detail_alamat', elAlamat.value.trim());
-      fd.append('nama_provinsi', elProv.value);
-      fd.append('nama_kabko', elKab.value);
-      fd.append('nama_kecamatan', elKec.value);
-      fd.append('nama_kelurahan', elKel.value);
-      fd.append('kode_pos', elPos.value);
-      
+      fd.append('detail_alamat', elAlamat.value);
       fd.append('id_provinsi', state.id_provinsi);
       fd.append('id_kabko', state.id_kabko);
       fd.append('id_kecamatan', state.id_kecamatan);
       fd.append('id_kelurahan', state.id_kelurahan);
+      fd.append('kode_pos', elPos.value);
       fd.append('id_shipping', state.id_shipping);
 
       fetch(SCRIPT_URL, { method: 'POST', body: fd })
         .then(res => res.json())
         .then(res => {
           if (res.status === "success") {
-            alert("✅ " + res.pesan);
-            window.location.reload(); 
+            alert("✓ Data berhasil disimpan secara permanen!");
+            document.getElementById('modalReview').classList.remove('active');
+            // Reset form or redirect
+            document.getElementById('formUtama').reset();
+            document.getElementById('cardForm').style.display = 'none';
+            document.getElementById('cardLogin').style.display = 'block';
+            document.getElementById('portalShell').classList.remove('is-form-stage');
+            state = { nim: '', id_provinsi: '', id_kabko: '', id_kecamatan: '', id_kelurahan: '', id_shipping: '' };
           } else {
-            alert("❌ " + res.pesan);
-            btnSimpan.innerText = "✓ Ya, Simpan Permanen";
-            btnSimpan.disabled = false;
-            document.getElementById('btnBatalReview').style.display = 'block';
+            showError('errorForm', "❌ " + (res.pesan || "Gagal menyimpan data. Silakan coba lagi."));
+            btn.disabled = false;
+            btn.innerHTML = '<span>✓ Ya, Simpan Permanen</span>';
           }
-        }).catch(err => alert("Koneksi gagal. Silakan coba lagi."));
+        })
+        .catch(err => {
+          showError('errorForm', "❌ Koneksi gagal saat menyimpan. Silakan coba lagi.");
+          console.error("Save error:", err);
+          btn.disabled = false;
+          btn.innerHTML = '<span>✓ Ya, Simpan Permanen</span>';
+        });
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('modalReview').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+      }
     });
   </script>
 </body>
