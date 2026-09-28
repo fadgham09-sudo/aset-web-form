@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Kelengkapan Data - UT</title>
-  
-  <!-- Import Google Fonts: Red Hat Display (Interstate alternative) -->
+  <title>Validasi Alamat Pengiriman BAC - UT</title>
   <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  
   <style>
     /* Color Palette */
     :root {
-      --primary-blue: #034694; /* R3 G70 B148 PANTONE Reflex Blue C */
-      --accent-yellow: #ffde00; /* R255 G222 B0 PANTONE 109 C */
+      --primary-blue: #034694;
+      --accent-yellow: #ffde00;
       --light-bg: #f8f9fc;
       --text-dark: #1a1a2e;
       --text-gray: #6b7280;
@@ -441,24 +438,390 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #002c5c;
     }
+
+    :root {
+      --primary-blue: #034694;
+      --accent-yellow: #ffde00;
+      --text-dark: #16243a;
+      --text-gray: #66758a;
+      --border-light: #dce4ee;
+      --border-blue: rgba(3, 70, 148, 0.16);
+      --panel-blue: #052f69;
+      --panel-deep: #032653;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      background-color: #f3f6fa;
+      background-image: linear-gradient(rgba(3, 70, 148, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(3, 70, 148, .035) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .portal-shell {
+      width: min(1180px, 100%);
+      min-height: 700px;
+      display: grid;
+      grid-template-columns: minmax(330px, .88fr) minmax(0, 1.12fr);
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(3, 70, 148, .12);
+      border-radius: 8px;
+      box-shadow: 0 28px 80px rgba(12, 39, 72, .16);
+      animation: fadeInUp .65s ease-out both;
+    }
+
+    .visual-panel {
+      min-height: 100%;
+      padding: 24px 38px 28px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      background: var(--panel-blue);
+      isolation: isolate;
+    }
+
+    .visual-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .16;
+      background-image: radial-gradient(rgba(255,255,255,.65) .8px, transparent .8px);
+      background-size: 17px 17px;
+      mask-image: linear-gradient(135deg, #000 0%, transparent 78%);
+    }
+
+    .visual-panel::after {
+      content: '';
+      position: absolute;
+      width: 240px;
+      height: 9px;
+      right: -54px;
+      top: 41%;
+      background: var(--accent-yellow);
+      transform: rotate(-45deg);
+      opacity: .9;
+      z-index: -1;
+    }
+
+    .visual-copy { margin: 0 0 26px; }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 14px;
+      color: #dceaff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before { content: ''; width: 24px; height: 3px; background: var(--accent-yellow); }
+
+    .visual-copy h2 {
+      max-width: 390px;
+      color: white;
+      font-size: clamp(32px, 3.1vw, 43px);
+      line-height: 1.08;
+      font-weight: 800;
+    }
+
+    .visual-copy p {
+      max-width: 350px;
+      margin-top: 15px;
+      color: rgba(255,255,255,.76);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .delivery-art {
+      min-height: 0;
+      margin-top: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      overflow: hidden;
+      border: 1px solid rgba(3,70,148,.16);
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .art-label, .art-status {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--primary-blue);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .9px;
+    }
+
+    .art-status { gap: 6px; color: var(--text-gray); letter-spacing: 0; text-transform: none; }
+    .art-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--primary-blue); }
+
+    .route-map {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 3px;
+      background: #fff;
+    }
+
+    .route-map video { display: block; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+    .form-stage-logo { display: none; }
+
+    .portal-shell.is-form-stage .visual-copy {
+      order: 1;
+      margin-top: 0;
+    }
+
+    .portal-shell.is-form-stage .delivery-art {
+      order: 2;
+      margin-top: auto;
+      margin-bottom: 40px;
+    }
+
+    .portal-shell.is-form-stage .steps { order: 3; }
+    .portal-shell.is-form-stage .visual-footer { order: 4; }
+
+    .portal-shell.is-form-stage .route-map {
+      width: min(100%, 378px);
+      height: 381px;
+      margin-inline: auto;
+      aspect-ratio: auto;
+      display: grid;
+      place-items: center;
+    }
+
+    .portal-shell.is-form-stage .route-map video { display: none; }
+    .portal-shell.is-form-stage .form-stage-logo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      object-fit: contain;
+    }
+
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .step-indicator {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 25px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 50%;
+      color: rgba(255,255,255,.65);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .step-label { color: rgba(255,255,255,.58); font-size: 10px; line-height: 1.3; }
+    .step-label strong { display: block; color: rgba(255,255,255,.72); font-size: 11px; }
+    .step-connector { width: 30px; height: 1px; background: rgba(255,255,255,.28); }
+    .step-current .step-indicator { border-color: var(--accent-yellow); color: var(--panel-deep); background: var(--accent-yellow); }
+    .step-current .step-label, .step-current .step-label strong { color: #fff; }
+    .is-form-stage .step-one .step-indicator { border-color: rgba(255,255,255,.55); color: var(--panel-deep); background: #fff; }
+    .is-form-stage .step-two .step-indicator { border-color: var(--accent-yellow); color: var(--panel-deep); background: var(--accent-yellow); }
+    .is-form-stage .step-two .step-label, .is-form-stage .step-two .step-label strong { color: #fff; }
+
+    .visual-footer {
+      margin-top: 22px;
+      color: rgba(255,255,255,.56);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .content-panel {
+      min-width: 0;
+      padding: 52px clamp(28px, 5vw, 70px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .page-logo {
+      position: absolute;
+      z-index: 2;
+      /*keep the existing size and position rules*/
+      top: 24px;
+      right: 30px;
+      width: 200px;
+      height: 80px;
+      object-fit: contain;
+      object-position: right center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 510px;
+      padding: 0;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      animation: fadeInUp .45s ease-out both;
+    }
+
+    .card::before, .card::after { display: none; }
+    .header { margin-bottom: 34px; text-align: left; animation: none; }
+    .header .eyebrow { color: var(--primary-blue); }
+    .header h1, .header h2 {
+      margin: 0 0 12px;
+      color: var(--text-dark);
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.15;
+      background: none;
+      -webkit-text-fill-color: currentColor;
+    }
+    .header p { max-width: 430px; margin: 0; color: var(--text-gray); font-size: 14px; line-height: 1.7; }
+    .header .subtitle-warning {
+      justify-content: flex-start;
+      padding: 11px 13px;
+      border-left: 3px solid #d99a00;
+      background: #fff8d7;
+      color: #765500;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .form-group { margin-bottom: 19px; animation: none; }
+    label { margin-bottom: 8px; color: #25364c; font-size: 13px; letter-spacing: 0; text-transform: none; }
+    input, select, textarea {
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid #cfd9e6;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 14px;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    input:hover, select:hover, textarea:hover { border-color: #8da9cb; background: #fff; }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(3,70,148,.12); }
+    input:disabled, select:disabled { background: #f1f4f7; color: #8b98a8; }
+    textarea { min-height: 112px; resize: vertical; }
+    input[readonly] { color: var(--primary-blue); background: #edf3fa !important; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+    .form-grid .field-wide { grid-column: 1 / -1; }
+    .char-count { margin-top: 7px; color: #9b5d00; font-size: 11px; font-weight: 700; }
+    .char-count.valid { color: #14714c; }
+
+    .btn-group { gap: 10px; animation: none; }
+    .btn {
+      min-height: 50px;
+      padding: 13px 18px;
+      border-radius: 4px;
+      background: var(--primary-blue);
+      font-size: 14px;
+      letter-spacing: 0;
+      transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .btn::before { display: none; }
+    .btn:hover { background: #002f69; transform: translateY(-1px); box-shadow: 0 7px 16px rgba(3,70,148,.2); }
+    .btn:disabled { background: #b6c2d0; color: #f7f9fb; }
+    .btn-secondary { border: 1px solid #aebdd0; color: var(--primary-blue); background: #fff; }
+    .btn-secondary:hover { color: var(--primary-blue); background: #f2f6fb; }
+
+    .modal-overlay { padding: 18px; background: rgba(8, 25, 48, .62); }
+    .modal-content { border-radius: 6px; padding: 32px; }
+    .modal-content h2 { color: var(--text-dark); }
+    .review-item { animation: none; }
+    .review-value { color: var(--primary-blue); }
+
+    @media (max-width: 860px) {
+      body { padding: 16px; }
+      .portal-shell { grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); min-height: 640px; }
+      .visual-panel { padding: 28px 24px 22px; }
+      .visual-copy { margin-top: 0; }
+      .visual-copy h2 { font-size: 34px; }
+      .content-panel { padding: 38px 28px; }
+    }
+
+    @media (max-width: 680px) {
+      body { display: block; padding: 0; background-size: 24px 24px; }
+      .portal-shell { width: 100%; min-height: 100vh; display: flex; flex-direction: column; border: 0; border-radius: 0; }
+      .visual-panel { min-height: auto; padding: 20px 22px 18px; }
+      .visual-copy { margin: 0 0 20px; }
+      .visual-copy .eyebrow { margin-bottom: 8px; }
+      .visual-copy h2 { max-width: 480px; font-size: 29px; }
+      .visual-copy p { margin-top: 8px; font-size: 12px; }
+      .delivery-art { margin-top: 0; padding: 10px; gap: 8px; }
+      .portal-shell.is-form-stage .delivery-art { margin-top: 0; }
+      .portal-shell.is-form-stage .route-map { height: 150px; }
+      .steps { margin-top: 15px; }
+      .visual-footer { display: none; }
+      .content-panel { flex: 1; padding: 86px 22px 38px; align-items: flex-start; }
+      .page-logo { top: 18px; right: 22px; width: 150px; height: 60px; }
+      .header { margin-bottom: 26px; }
+      .header h1, .header h2 { font-size: 26px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .field-wide { grid-column: auto; }
+      .modal-content { padding: 24px 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
   </style>
 </head>
 <body>
 
+  <main class="portal-shell" id="portalShell">
+    <aside class="visual-panel" aria-label="Informasi portal pengiriman bahan ajar">
+      <div class="visual-copy">
+        <div class="eyebrow">Portal layanan mahasiswa</div>
+        <h2>Alamat tepat,<br>bahan ajar sampai.</h2>
+        <p>Pastikan informasi tujuan pengiriman Anda benar agar Bahan Ajar Cetak tiba di alamat yang sesuai.</p>
+      </div>
+      <div class="delivery-art" aria-hidden="true">
+        <div class="art-label"><span>PDBA UT</span><span class="art-status">Siap Melayani</span></div>
+        <div class="route-map">
+          <video autoplay muted loop playsinline preload="metadata" aria-label="Animasi logo PDBA tersusun dari kepingan puzzle">
+            <source src="../Aset%20Grafis%20UT/animasi-logo-PDBA.mp4" type="video/mp4">
+          </video>
+          <img class="form-stage-logo" src="../Aset%20Grafis%20UT/Logo-PDBA1.png" alt="">
+        </div>
+      </div>
+      <div class="steps" aria-label="Tahapan pengisian">
+        <div class="step-current step-one"><span class="step-indicator">01</span><span class="step-label"><strong>Verifikasi</strong>NIM mahasiswa</span></div>
+        <span class="step-connector"></span>
+        <div class="step-two"><span class="step-indicator">02</span><span class="step-label"><strong>Lengkapi</strong>Alamat pengiriman</span></div>
+      </div>
+      <p class="visual-footer">Data digunakan untuk keperluan pengiriman Bahan Ajar Cetak.</p>
+    </aside>
+
+    <section class="content-panel">
+      <img class="page-logo" src="../Aset%20Grafis%20UT/logo%20warna%20UT.png" alt="Universitas Terbuka">
   <!-- STEP 1: LOGIN CREDENTIALS (NIM Only) -->
   <div class="card" id="cardLogin">
     <div class="header">
-      <div class="header-logo-group">
-        <img src="logo warna UT.png" alt="Logo UT">
-        <img src="logo warna kemendikbud.png" alt="Logo Kemendikbud">
-      </div>
+      <div class="eyebrow">Verifikasi identitas</div>
       <h1>Verifikasi Data Alamat Pengiriman</h1>
       <p>Masukkan NIM Anda untuk melanjutkan proses kelengkapan data alamat pengiriman Bahan Ajar Cetak Anda.</p>
     </div>
     <form id="formCek">
       <div class="form-group">
-        <label>NIM Mahasiswa</label>
-        <input type="text" id="nim" required placeholder="Contoh: 123456789">
+        <label for="nim">NIM Mahasiswa</label>
+        <input type="text" id="nim" required autocomplete="username" placeholder="Contoh: 123456789">
       </div>
       <div class="btn-group">
         <button type="submit" class="btn" id="btnCek">
@@ -471,46 +834,48 @@
   <!-- STEP 2: FORM ADDRESS -->
   <div class="card" id="cardForm" style="display: none;">
     <div class="header">
+      <div class="eyebrow">Tahap 2 dari 2</div>
       <h2>Lengkapi Data Alamat Pengiriman</h2>
-      <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">Pastikan semua data yang Anda masukkan sudah akurat dan lengkap sebelum menyimpan.</p>
+      <p>Pastikan semua data yang Anda masukkan sudah akurat dan lengkap sebelum menyimpan.</p>
       <p class="subtitle-warning">⚠️ Perhatian: Data hanya dapat disimpan 1 (satu) kali secara permanen.</p>
     </div>
     <form id="formUtama">
-      
+      <div class="form-grid">
       <div class="form-group">
-        <label>NIM Tervalidasi</label>
+        <label for="lockNim">NIM Tervalidasi</label>
         <input type="text" id="lockNim" readonly style="background:#eee; font-weight:bold; cursor:not-allowed;">
       </div>
 
-      <div class="form-group">
-        <label>Detail Alamat Lengkap (Min. 40 Karakter)</label>
+      <div class="form-group field-wide">
+        <label for="detail_alamat">Detail Alamat Lengkap (Min. 40 Karakter)</label>
         <textarea id="detail_alamat" placeholder="Nama Jalan, RT/RW, Blok/Nomor Rumah, Patokan Gedung..."></textarea>
         <div class="char-count" id="charCount">0 / 40 Karakter (Belum Memenuhi)</div>
       </div>
       
       <div class="form-group">
-        <label>Provinsi</label>
+        <label for="provinsi">Provinsi</label>
         <select id="provinsi"><option value="">-- Pilih Provinsi --</option></select>
       </div>
       
       <div class="form-group">
-        <label>Kabupaten / Kota</label>
+        <label for="kabko">Kabupaten / Kota</label>
         <select id="kabko" disabled><option value="">-- Pilih Kab/Kota --</option></select>
       </div>
       
       <div class="form-group">
-        <label>Kecamatan</label>
+        <label for="kecamatan">Kecamatan</label>
         <select id="kecamatan" disabled><option value="">-- Pilih Kecamatan --</option></select>
       </div>
       
       <div class="form-group">
-        <label>Kelurahan</label>
+        <label for="kelurahan">Kelurahan</label>
         <select id="kelurahan" disabled><option value="">-- Pilih Kelurahan --</option></select>
       </div>
       
       <div class="form-group">
-        <label>Kode Pos</label>
-        <input type="number" id="kode_pos" placeholder="Masukkan 5 digit kode pos">
+        <label for="kode_pos">Kode Pos</label>
+        <input type="text" id="kode_pos" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" placeholder="Masukkan 5 digit kode pos">
+      </div>
       </div>
 
       <div class="btn-group">
@@ -520,6 +885,8 @@
       </div>
     </form>
   </div>
+    </section>
+  </main>
 
   <!-- STEP 3: REVIEW MODAL (POPUP) -->
   <div class="modal-overlay" id="modalReview">
@@ -591,6 +958,7 @@
           if (res.status === "success") {
             document.getElementById('cardLogin').style.display = 'none';
             document.getElementById('cardForm').style.display = 'block';
+            document.getElementById('portalShell').classList.add('is-form-stage');
             document.getElementById('lockNim').value = state.nim;
           } else {
             alert("❌ " + res.pesan);
@@ -645,7 +1013,7 @@
         countEl.classList.remove('valid');
       }
 
-      if (charLen >= 40 && elProv.value && elKab.value && elKec.value && elKel.value && elPos.value.length > 3) {
+      if (charLen >= 40 && elProv.value && elKab.value && elKec.value && elKel.value && /^\d{5}$/.test(elPos.value)) {
         btnReview.disabled = false;
       } else {
         btnReview.disabled = true;
